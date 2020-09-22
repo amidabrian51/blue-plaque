@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 // import logo from './logo.svg';
 import { CardList } from './components/card-list/card-list.component';
 import './App.css';
+import { SearchBox } from './components/search-box/search-box.component';
 
 class App extends Component {
   constructor(){
     super();
     this.state ={
-      signs:  []
+      signs:  [],
+      searchField: ''
     }
   }
 
@@ -19,9 +21,19 @@ class App extends Component {
     .then(plaque => this.setState({signs: plaque}));
   }
   render(){
+    const {signs, searchField } = this.state;
+    const filteredSigns = signs.filter(sign => sign.title.toLowerCase().includes(searchField.toLowerCase()))
     return(
       <div className='App'>
-        <CardList signs={this.state.signs}/>
+        <SearchBox
+          placeholder= 'location'
+          handleChange= {e=> this.setState({searchField: e.target.value})}
+        />
+        {/* <input type='search' 
+        placeholder='location' 
+        onChange={e=> this.setState({searchField: e.target.value})} 
+        /> */}
+        <CardList signs={filteredSigns}/>
       
       </div>
     )
