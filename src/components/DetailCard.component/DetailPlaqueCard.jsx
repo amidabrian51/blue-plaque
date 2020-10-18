@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
-import GoogleMapReact from 'google-maps-react';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 
 function DetailPlaqueCard({match}){
-    const mapRef = useRef();
+    
     useEffect(() =>{
         fetchItem();
         console.log(match)
@@ -13,10 +13,14 @@ function DetailPlaqueCard({match}){
     const [item, setItem] = useState([]);
 
     
-    // const mapStyles = {
-    //     width: '40%',
-    //     height: '40%'
-    //   };
+    const mapStyles = {        
+        height: "50vh",
+        width: "50%"
+    };
+
+    //   const defaultCenter = {
+    //     lat: 51.5235, lng: -0.1399
+    //   }
 
     const fetchItem = async()=>{
         var proxyUrl = 'https://cors-anywhere.herokuapp.com/'
@@ -27,7 +31,7 @@ function DetailPlaqueCard({match}){
         console.log(item)
     }
     
-    
+    const API_KEY = process.env.REACT_APP_GOOGLE_KEY;
     
     return (
         
@@ -40,19 +44,16 @@ function DetailPlaqueCard({match}){
             <h1>Here is the detailed page</h1>
             <h2>The inscription:{item.inscription}</h2>
             <p>Address: {item.address}</p>
-            <GoogleMapReact
-                bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_KEY }}
-                initialCenter={{
-                    latitude: 51.48904, longitude: -0.29049
-                  }}
-                defaultZoom={15}
-                google={window.google}
-                style={{ height: '50%', width: '50%' }}
-                yesIWantToUseGoogleMapApiInternals
-                onGoogleApiLoaded={({map}) => {
-                    mapRef.current = map;
-                }}
-            />
+            <LoadScript
+            googleMapsApiKey={API_KEY}>
+        <GoogleMap
+           mapContainerStyle={mapStyles}
+          zoom={17}
+          center={{lat: item.latitude, lng: item.longitude}}>
+          <Marker key={item.inscription} position={{lat: item.latitude, lng: item.longitude}}/>
+          </GoogleMap>
+     </LoadScript>
+            
         </div>
     )
 }
