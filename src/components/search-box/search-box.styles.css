@@ -1,9 +1,16 @@
 .search{
     -webkit-appearance: none;
-    border: none;
-    outline: none;
+    border: black;
+    
     padding: 10px;
     width: 150px;
     line-height: 30px;
     margin-bottom: 30px;
+}
+
+input[type="search"]{
+    margin: 0 auto;
+    height: 20px;
+    width: 30%;
+    margin-bottom: 20px;
 }

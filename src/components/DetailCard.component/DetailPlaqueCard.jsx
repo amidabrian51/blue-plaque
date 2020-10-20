@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 
 
 function DetailPlaqueCard({match}){
@@ -11,12 +11,16 @@ function DetailPlaqueCard({match}){
         // eslint-disable-next-line 
     },[])
     const [item, setItem] = useState([]);
-
+    const [selected, setSelected] = useState({})
     
     const mapStyles = {        
         height: "50vh",
         width: "50%"
     };
+    
+    const onSelect = item => {
+        setSelected(item)
+    }
 
     //   const defaultCenter = {
     //     lat: 51.5235, lng: -0.1399
@@ -50,7 +54,23 @@ function DetailPlaqueCard({match}){
            mapContainerStyle={mapStyles}
           zoom={17}
           center={{lat: item.latitude, lng: item.longitude}}>
-          <Marker key={item.inscription} position={{lat: item.latitude, lng: item.longitude}}/>
+          {
+          <Marker key={item.inscription} position={{lat: item.latitude, lng: item.longitude}}
+          onClick={()=> onSelect(item)}
+          />
+          }
+          {
+            selected.inscription && 
+            (
+          <InfoWindow
+          position={{lat: item.latitude, lng: item.longitude}}
+          clickable={true}
+          onCloseClick={() => setSelected({})}
+          >
+              <p>{selected.inscription}</p>
+          </InfoWindow>
+            )
+        }
           </GoogleMap>
      </LoadScript>
             
