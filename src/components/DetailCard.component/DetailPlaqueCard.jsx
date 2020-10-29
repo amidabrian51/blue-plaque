@@ -1,5 +1,7 @@
 import React, { useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
+import './DetailPlaqueCard.css';
+import {useMediaQuery} from '../UseMediaQuery';
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 
 
@@ -12,10 +14,14 @@ function DetailPlaqueCard({match}){
     },[])
     const [item, setItem] = useState([]);
     const [selected, setSelected] = useState({})
+
+    const isScreenBased = useMediaQuery('(max-width: 375px)')
     
     const mapStyles = {        
-        height: "50vh",
-        width: "50%"
+        height: isScreenBased ? "50vh" : "70vh",
+        width: isScreenBased ? "40vh" : "70vh",
+        padding:  "10px",
+        marginTop: "30px",
     };
     
     const onSelect = item => {
@@ -39,19 +45,24 @@ function DetailPlaqueCard({match}){
     
     return (
         
-        <div>
+<div>
             <Link to="/">
             <button>
             <i class="fas fa-arrow-left"></i>Back
             </button>
             </Link>
+    <div className="container">
+        <div>
             <h1>Here is the detailed page</h1>
-            <h2>The inscription:{item.inscription}</h2>
+            <h2>The inscription:</h2>
+            <p>{item.inscription}</p>
             <p>Address: {item.address}</p>
+        </div>
+        <div className="mapStyles">
             <LoadScript
             googleMapsApiKey={API_KEY}>
-        <GoogleMap
-           mapContainerStyle={mapStyles}
+        <GoogleMap 
+          mapContainerStyle={mapStyles}
           zoom={17}
           center={{lat: item.latitude, lng: item.longitude}}>
           {
@@ -73,8 +84,9 @@ function DetailPlaqueCard({match}){
         }
           </GoogleMap>
      </LoadScript>
-            
-        </div>
+     </div>
+    </div>
+</div>
     )
 }
 
